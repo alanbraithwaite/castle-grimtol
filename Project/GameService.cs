@@ -62,28 +62,18 @@ namespace CastleGrimtol.Project
     public void Go(string direction)
     {
       // determine if direction is valid
-      if (!Command[0] == null)
-
-
-
-
+      if (CurrentRoom.Exits.ContainsKey(direction))
+      {
+        CurrentRoom = CurrentRoom.Exits[direction];
+        Console.WriteLine(CurrentRoom.Description);
+      }
       else
       {
-        if (CurrentRoom.Go(input[1]) == null)
-        {
-          Console.Clear();
-          Console.WriteLine("You peer into the blackness and see only a wall ahead, your path is blocked");
-        }
-        else
-        {
-          CurrentRoom = CurrentRoom.Go(input[1]);
-          Console.Clear();
-        }
-        Room nextroom = (Room)CurrentRoom.Exits[direction];
-        CurrentRoom = Rooms[CurrentRoom.Exits[direction].Name];
+        Console.Clear();
+        Console.WriteLine("You peer into the blackness and see only a wall ahead, your path is blocked");
       }
-
-
+      // Room nextroom = (Room)CurrentRoom.Exits[direction];
+      // CurrentRoom = Rooms[CurrentRoom.Exits[direction].Name];
     }
 
     public void Help()
