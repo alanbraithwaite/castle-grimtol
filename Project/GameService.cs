@@ -13,14 +13,10 @@ namespace CastleGrimtol.Project
 
     public void GetUserInput()
     {
-      Console.WriteLine("What would you like to do");
+      Console.WriteLine($"What would you like to do {CurrentPlayer.PlayerName}!");
       String Input = Console.ReadLine().ToLower();
       String[] Command = Input.Split(" ");
-      if (Command.Length > 2)
-      {
-        Console.WriteLine("Invalid Command!");
-      }
-      else
+      if (Command.Length <= 2 && Command.Length >= 1)
       {
         switch (Command[0].ToLower())
         {
@@ -28,7 +24,11 @@ namespace CastleGrimtol.Project
             if (Command.Length == 2)
             {
               Go(Command[1]);
+              break;
             }
+            else
+              Console.WriteLine("You must give a valid command you bucket of Puke!");
+            GetUserInput();
             break;
           // case "help":
 
@@ -52,9 +52,16 @@ namespace CastleGrimtol.Project
           //   UseItem(Item.)
           //   break;
           default:
-
+            Console.Clear();
+            Console.WriteLine("You must give a valid command you bucket of Puke!");
+            GetUserInput();
             break;
         }
+      }
+      else
+      {
+        Console.WriteLine("Invalid Command!");
+        GetUserInput();
       }
 
     }
@@ -64,13 +71,16 @@ namespace CastleGrimtol.Project
       // determine if direction is valid
       if (CurrentRoom.Exits.ContainsKey(direction))
       {
+        Console.Clear();
         CurrentRoom = CurrentRoom.Exits[direction];
         Console.WriteLine(CurrentRoom.Description);
+        GetUserInput();
       }
       else
       {
         Console.Clear();
-        Console.WriteLine("You peer into the blackness and see only a wall ahead, your path is blocked");
+        Console.WriteLine($"You peer into the blackness and see only a wall. {CurrentRoom.Description}");
+        GetUserInput();
       }
       // Room nextroom = (Room)CurrentRoom.Exits[direction];
       // CurrentRoom = Rooms[CurrentRoom.Exits[direction].Name];
@@ -95,6 +105,7 @@ namespace CastleGrimtol.Project
 
     public void Quit()
     {
+      Console.Clear();
       Console.WriteLine("Come back when you get some courage!");
       System.Threading.Thread.Sleep(5000);
       System.Environment.Exit(1);
@@ -113,6 +124,13 @@ namespace CastleGrimtol.Project
       Room Right = new Room("Right", "This is the Right room");
       Room Bottom = new Room("Bottom", "This is the Bottom room");
 
+      Item EightBall = new Item("Magic Eightball", "Could help you but could also kill you depending on the answer");
+      Item Sword = new Item("Indistructable Sword", "Can be used to smash and destroy things");
+      Item Key = new Item("Door key", "Can be used to open certain doors");
+      Item Depends = new Item("Dirty pair of depends underwear", "Can be worn but they smell awful. Possible it could be used for protection");
+      Item EvilWizard = new Item("Evil Wizard", "The only way to escape is for you to Destroy the Evil wizard")
+
+
       Center.Exits.Add("north", Top);
       Center.Exits.Add("west", Left);
       Center.Exits.Add("east", Right);
@@ -122,9 +140,8 @@ namespace CastleGrimtol.Project
       Right.Exits.Add("west", Center);
       Bottom.Exits.Add("north", Center);
 
-      Item EightBall = new Item("Magic Eightball", "Could help you but could also kill you depending on the answer");
-      Item Sword = new Item("Indistructable Sword", "Can be used to smash and destroy things");
-      Item Key = new Item("Door key", "Can be used to open certain doors");
+
+      Left.Items.Add(EightBall);
 
       Rooms.Clear();
       Rooms.Add(Center.Name, Center);
@@ -153,6 +170,10 @@ namespace CastleGrimtol.Project
         if (PlayerName == "")
         {
           Console.WriteLine("Enter a real name you bucket of Puke!");
+        }
+        if (PlayerName.ToLower() == "quit")
+        {
+          Quit();
         }
       }
       CurrentPlayer = new Player(PlayerName);

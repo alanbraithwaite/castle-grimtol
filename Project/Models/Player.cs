@@ -8,9 +8,11 @@ namespace CastleGrimtol.Project.Models
   {
     public string PlayerName { get; set; }
     public List<Item> Inventory { get; set; }
+    public bool Alive = true;
     public Player(string playername)
     {
       PlayerName = playername;
+      Inventory = new List<Item>();
     }
   }
 }
