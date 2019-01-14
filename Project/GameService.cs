@@ -280,6 +280,7 @@ namespace CastleGrimtol.Project
                 Console.WriteLine("The was a chance for you to live");
                 Console.WriteLine("This time the Eightball did not give");
                 Console.WriteLine("Try agin and you will see that I can help to set you free");
+                Console.WriteLine("YOU ARE DEAD!");
                 Reset();
               }
               if (meb == 2)
@@ -303,10 +304,6 @@ namespace CastleGrimtol.Project
               if (CurrentRoom.Name != "Top")
               {
                 Console.WriteLine("There is nothing to Kill here");
-              }
-              else
-              {
-                // if (CurrentPlayer.Inventory.Contains("Depends"))
               }
               break;
             }
@@ -373,12 +370,47 @@ namespace CastleGrimtol.Project
               {
                 Console.WriteLine("There is nothing to Kill here");
               }
+
               else
               {
-                // if (CurrentPlayer.Inventory.Contains("Depends"))
+                Item depends = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "depends");
+                Item magic = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "magic-eightball");
+                if (depends != null && magic != null)
+                {
+                  Console.WriteLine("You Swing your Sword and Kill the Evil Wizard!");
+                  Console.WriteLine("As the Wizard is dieing, he curses you and asks");
+                  Console.WriteLine("HOW DID YOU KNOW? ");
+                  Console.WriteLine("MY SPELL SHOULD HAVE WORKED! CURSE YOU!");
+                  Console.WriteLine("Yu look down and the dirty depends ");
+                  Console.WriteLine("transforms into an indistuctable set of armor");
+                  Console.WriteLine("You return to your kindom victorious");
+                  Console.WriteLine("and with you honor in tacked you bucket of puke!");
+                  Console.WriteLine("Uhhh sorry Sir. I'm just a lowley Sergeant!");
+                  Console.WriteLine(" ");
+                  Console.WriteLine(" ");
+                  Console.WriteLine("'play' or 'p' to play again, anything else to quit");
+                  string restart = Console.ReadLine().Trim();
+                  if (!(restart.ToLower() == "play" || restart.ToLower() == "p"))
+                  {
+                    Quit();
+                  }
+                  StartGame();
+                }
+                else
+                {
+                  Console.WriteLine("You Swing your sword at the Evil Wizard ");
+                  Console.WriteLine("He just stands there and laughs at you");
+                  Console.WriteLine("as your sword hits him and says ");
+                  Console.WriteLine("Now you are going to DIE!");
+                  Console.WriteLine("He casts a spell and your skin starts to burn");
+                  Console.WriteLine("the last thing you hear is the Evil Wizard laughing!");
+                  Console.WriteLine("YOU ARD DEAD ");
+                  Reset();
+                }
               }
               break;
             }
+
           case "armor":
             {
               CurrentPlayer.Alive = false;
@@ -406,6 +438,7 @@ namespace CastleGrimtol.Project
         Console.WriteLine($"There is no such '{itemName}' in this room or your inventory");
       }
     }
+
 
     //Print the list of items in the players inventory to the console
     public void Inventory()
