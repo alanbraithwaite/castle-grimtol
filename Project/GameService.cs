@@ -216,7 +216,7 @@ namespace CastleGrimtol.Project
     public void Quit()
     {
       Console.Clear();
-      Console.WriteLine("Come back when you get some courage ou bucket of Puke!");
+      Console.WriteLine("Come back when you get some courage you bucket of Puke!");
       System.Threading.Thread.Sleep(3000);
       System.Environment.Exit(1);
     }
@@ -243,33 +243,33 @@ namespace CastleGrimtol.Project
     public void Go(string direction)
     {
       // determine if direction is valid
-      if (CurrentRoom.Exits.ContainsKey(direction) && direction.ToLower() != "top")
+      if (CurrentRoom.Exits.ContainsKey(direction))
       {
         Console.Clear();
         CurrentRoom = CurrentRoom.Exits[direction];
         Console.WriteLine(CurrentRoom.Description);
-      }
-      else if (CurrentRoom.Name.ToLower() == "top")
-      {
-        System.Threading.Thread.Sleep(3000);
-        Item sword = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "sword");
-        Item depends = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "depends");
-        Item magic = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "magic-eightball");
-        if (depends != null && magic != null && sword != null)
+
+        if (CurrentRoom.Name.ToLower() == "top")
         {
-          GetUserInput();
-        }
-        else
-        {
-          Console.Clear();
-          Console.WriteLine("The Evil Wizard looks at you and laughs");
-          Console.WriteLine("Now you bucket of Puke! You are going to DIE!");
-          Console.WriteLine("He casts a spell and your skin starts to burn");
-          Console.WriteLine("The last thing you hear is the Evil Wizard laughing!");
-          Console.WriteLine("YOU ARD DEAD ");
-          System.Threading.Thread.Sleep(9000);
-          CurrentPlayer.Alive = false;
-          Reset();
+          Item sword = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "sword");
+          Item depends = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "depends");
+          Item magic = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "magic-eightball");
+          if (depends != null && magic != null && sword != null)
+          {
+            GetUserInput();
+          }
+          else
+          {
+            Console.Clear();
+            Console.WriteLine("The Evil Wizard looks at you and laughs");
+            Console.WriteLine("Now you bucket of Puke! You are going to DIE!");
+            Console.WriteLine("He casts a spell and your skin starts to burn");
+            Console.WriteLine("The last thing you hear is the Evil Wizard laughing!");
+            Console.WriteLine("YOU ARD DEAD ");
+            System.Threading.Thread.Sleep(9000);
+            CurrentPlayer.Alive = false;
+            Reset();
+          }
         }
       }
       else
@@ -287,15 +287,23 @@ namespace CastleGrimtol.Project
     public void TakeItem(string itemName)
     {
       Item choice = CurrentRoom.Items.Find(i => i.Name.ToLower() == itemName.ToLower());
-      if (choice != null && choice.Name.ToLower() != "wizard")
+      if (choice != null)
       {
+        if (choice.Name.ToLower() == "wizard")
+        {
+          Console.WriteLine("You bucket of Puke! Thats a Wizard you are try'n to put in yer pocket!");
+          Console.WriteLine("Uhhh Pardon Sir, I'm just a lowly Sergeant.");
+
+          return;
+        }
+
         CurrentPlayer.Inventory.Add(choice);
         CurrentRoom.Items.Remove(choice);
         Console.WriteLine($"You have added '{choice.Name}' to you Inventory");
       }
       else
       {
-        Console.WriteLine($"There is no such '{itemName}' in this room");
+        Console.WriteLine($"There is no '{itemName}' in this room");
       }
     }
 
@@ -310,249 +318,175 @@ namespace CastleGrimtol.Project
       {
         // if item is in the room
         choice = CurrentRoom.Items.Find(i => i.Name.ToLower() == itemName.ToLower());
-        switch (itemName)
-        {
-          case "magic-eightball":
-            {
-              System.Random rnd = new Random();
-              int meb = rnd.Next(1, 4);
-              if (meb == 1)
-              {
-                Console.Clear();
-                Console.WriteLine("There was a chance for you to live");
-                Console.WriteLine("This time the Eightball did not give");
-                Console.WriteLine("Try agin and you will see that I can help to set you free");
-                Console.WriteLine("YOU ARE DEAD!");
-                System.Threading.Thread.Sleep(9000);
-                CurrentPlayer.Alive = false;
-                Reset();
-              }
-              if (meb == 2)
-              {
-                Console.Clear();
-                Console.WriteLine("Fanshionable Armor you may wear");
-                Console.WriteLine("Only wear it if you dare");
-                Console.WriteLine("It may not be what you think");
-                Console.WriteLine("If you can stand the nasty stink");
-              }
-              if (meb == 3)
-              {
-                Console.Clear();
-                Console.WriteLine("Keep me with you if you must ");
-                Console.WriteLine("but you might turn into dust");
-                Console.WriteLine("Only with me you will see");
-                Console.WriteLine("that I can help to set you free");
-              }
-              break;
-            }
-          case "sword":
-            {
-              if (CurrentRoom.Name != "Top")
-              {
-                Console.WriteLine("There is nothing to Kill here");
-              }
-              break;
-            }
-          case "armor":
+
+      }
+
+      if (choice == null)
+      {
+        Console.WriteLine($"There is no '{itemName}' in this room or your inventory");
+        return;
+      }
+
+      switch (itemName)
+      {
+        case "magic-eightball":
+          {
+            System.Random rnd = new Random();
+            int meb = rnd.Next(1, 4);
+            if (meb == 1)
             {
               Console.Clear();
-              Console.WriteLine("As you try on the Armor it fits very well......wait");
-              Console.WriteLine("What is that smell? It is your skin burning off of your bones!");
-              Console.WriteLine("There must have been poison on the inside of the Armor!");
-              Console.WriteLine("DAMN YOU WIZARD!");
-              Console.WriteLine("You hear yourself screeming and then...YOU DIE!");
+              Console.WriteLine("There was a chance for you to live");
+              Console.WriteLine("This time the Eightball did not give");
+              Console.WriteLine("Try agin and you will see that I can help to set you free");
+              Console.WriteLine("YOU ARE DEAD!");
+              System.Threading.Thread.Sleep(9000);
+              CurrentPlayer.Alive = false;
+              Reset();
+            }
+            if (meb == 2)
+            {
+              Console.Clear();
+              Console.WriteLine("Fanshionable Armor you may wear");
+              Console.WriteLine("Only wear it if you dare");
+              Console.WriteLine("It may not be what you think");
+              Console.WriteLine("If you can stand the nasty stink");
+            }
+            if (meb == 3)
+            {
+              Console.Clear();
+              Console.WriteLine("Keep me with you if you must ");
+              Console.WriteLine("but you might turn into dust");
+              Console.WriteLine("Only with me you will see");
+              Console.WriteLine("that I can help to set you free");
+            }
+            break;
+          }
+        case "sword":
+          {
+            if (CurrentRoom.Name != "Top")
+            {
+              Console.WriteLine("There is nothing to Kill here");
+              break;
+            }
+            //Item wizard = CurrentRoom.Items.Find(item => item.Name.ToLower() == "wizard");
+            Item sword = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "sword");
+            Item depends = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "depends");
+            Item magic = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "magic-eightball");
+            if (depends != null && magic != null && sword != null) // && wizard != null)
+            {
+              Console.Clear();
+              Console.WriteLine("You Swing your Sword and Kill the Evil Wizard!");
+              Console.WriteLine("As the Wizard is dieing, he curses you and asks");
+              Console.WriteLine("HOW DID YOU KNOW? ");
+              Console.WriteLine("MY SPELL SHOULD HAVE WORKED! CURSE YOU!");
+              Console.WriteLine("You look down at the dirty depends ");
+              Console.WriteLine("as they transform into your family armor!");
+              Console.WriteLine("The opening to the cavern appears.");
+              Console.WriteLine("You return to your kindom victorious");
+              Console.WriteLine("with you honor restored you bucket of puke!");
+              Console.WriteLine("Uhhh sorry Sir. I'm just a lowley Sergeant!");
+              Console.WriteLine(" ");
+              Console.WriteLine(" ");
+              Console.WriteLine("'play' or 'p' to play again, anything else to quit");
+              string restart = Console.ReadLine().Trim();
+              if (!(restart.ToLower() == "play" || restart.ToLower() == "p"))
+              {
+                Quit();
+              }
+              StartGame();
+            }
+            else
+            {
+              Console.Clear();
+              Console.WriteLine("You Swing your sword at the Evil Wizard! ");
+              Console.WriteLine("He just stands there and laughs at you");
+              Console.WriteLine("as your sword hits him and says");
+              Console.WriteLine("Now you are going to DIE!");
+              Console.WriteLine("He casts a spell and your skin starts to burn");
+              Console.WriteLine("the last thing you hear is the Evil Wizard laughing!");
+              Console.WriteLine("YOU ARD DEAD ");
               System.Threading.Thread.Sleep(9000);
               CurrentPlayer.Alive = false;
               Reset();
             }
             break;
-          case "depends":
+          }
+        case "armor":
+          {
+            Console.Clear();
+            Console.WriteLine("As you try on the Armor it fits very well......wait");
+            Console.WriteLine("What is that smell? It is your skin burning off of your bones!");
+            Console.WriteLine("There must have been poison on the inside of the Armor!");
+            Console.WriteLine("DAMN YOU WIZARD!");
+            Console.WriteLine("You hear yourself screeming and then...YOU DIE!");
+            System.Threading.Thread.Sleep(9000);
+            CurrentPlayer.Alive = false;
+            Reset();
+          }
+          break;
+        case "depends":
+          {
+            Console.Clear();
+            Console.WriteLine("As you put on the nasty smelling depends underware");
+            Console.WriteLine("you are overwhelmed by the smell and everything goes dark");
+            System.Threading.Thread.Sleep(3000);
+            Console.WriteLine("Hours later you wake up though you can't smell anthing");
+            Console.WriteLine("the depends fit quite nicely!");
+          }
+          break;
+        case "wizard":
+          {
+            Item wizard = CurrentRoom.Items.Find(i => i.Name.ToLower() == "wizard");
+            Item sword = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "sword");
+            Item depends = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "depends");
+            Item magic = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "magic-eightball");
+            if (depends != null && magic != null && sword != null && wizard != null)
             {
               Console.Clear();
-              Console.WriteLine("As you put on the nasty smelling depends underware");
-              Console.WriteLine("you are overwhelmed by the smell and everything goes dark");
-              System.Threading.Thread.Sleep(3000);
-              Console.WriteLine("Hours later you wake up though you can't smell anthing");
-              Console.WriteLine("the depends fit quite nicely!");
+              Console.WriteLine("The Evil Wizard casts a spell and it has no effect!");
+              Console.WriteLine("You grab the Evil wizard and squeez him!");
+              Console.WriteLine("You hear bones being crushed!");
+              Console.WriteLine("As the Wizard is dieing, he curses you and asks");
+              Console.WriteLine("HOW DID YOU KNOW? ");
+              Console.WriteLine("MY SPELL SHOULD HAVE WORKED! CURSE YOU!");
+              Console.WriteLine("You look down at the dirty depends ");
+              Console.WriteLine("as they transform into your family armor!");
+              Console.WriteLine("The opening to the cavern appears.");
+              Console.WriteLine("You return to your kindom victorious");
+              Console.WriteLine("with you honor restored you bucket of puke!");
+              Console.WriteLine("Uhhh sorry Sir. I'm just a lowley Sergeant!");
+              Console.WriteLine(" ");
+              Console.WriteLine(" ");
+              Console.WriteLine("'play' or 'p' to play again, anything else to quit");
+              string restart = Console.ReadLine().Trim();
+              if (!(restart.ToLower() == "play" || restart.ToLower() == "p"))
+              {
+                Quit();
+              }
+              StartGame();
+            }
+            else if (wizard != null)
+            {
+              Console.Clear();
+              Console.WriteLine("As you try to grab the Evil Wizard");
+              Console.WriteLine("He just stands there and laughs at you");
+              Console.WriteLine("Now you are going to DIE!");
+              Console.WriteLine("He casts a spell and your skin starts to burn");
+              Console.WriteLine("the last thing you hear is the Evil Wizard laughing!");
+              Console.WriteLine("YOU ARD DEAD ");
+              System.Threading.Thread.Sleep(9000);
+              CurrentPlayer.Alive = false;
+              Reset();
+            }
+            else
+            {
+              Console.WriteLine($"There is no '{itemName}' in this room");
             }
             break;
-          case "wizard":
-            {
-              Item wizard = CurrentRoom.Items.Find(i => i.Name.ToLower() == "wizard");
-              Item sword = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "sword");
-              Item depends = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "depends");
-              Item magic = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "magic-eightball");
-              if (depends != null && magic != null && sword != null && wizard != null)
-              {
-                Console.Clear();
-                Console.WriteLine("The Evil Wizard casts a spell and it has no effect!");
-                Console.WriteLine("You grab the Evil wizard and squeez him!");
-                Console.WriteLine("You hear bones being crushed!");
-                Console.WriteLine("As the Wizard is dieing, he curses you and asks");
-                Console.WriteLine("HOW DID YOU KNOW? ");
-                Console.WriteLine("MY SPELL SHOULD HAVE WORKED! CURSE YOU!");
-                Console.WriteLine("You look down at the dirty depends ");
-                Console.WriteLine("as they transform into your family armor!");
-                Console.WriteLine("The opening to the cavern appears.");
-                Console.WriteLine("You return to your kindom victorious");
-                Console.WriteLine("with you honor restored you bucket of puke!");
-                Console.WriteLine("Uhhh sorry Sir. I'm just a lowley Sergeant!");
-                Console.WriteLine(" ");
-                Console.WriteLine(" ");
-                Console.WriteLine("'play' or 'p' to play again, anything else to quit");
-                string restart = Console.ReadLine().Trim();
-                if (!(restart.ToLower() == "play" || restart.ToLower() == "p"))
-                {
-                  Quit();
-                }
-                StartGame();
-              }
-              else if (wizard != null)
-              {
-                Console.Clear();
-                Console.WriteLine("As you try to grab the Evil Wizard");
-                Console.WriteLine("He just stands there and laughs at you");
-                Console.WriteLine("Now you are going to DIE!");
-                Console.WriteLine("He casts a spell and your skin starts to burn");
-                Console.WriteLine("the last thing you hear is the Evil Wizard laughing!");
-                Console.WriteLine("YOU ARD DEAD ");
-                System.Threading.Thread.Sleep(9000);
-                CurrentPlayer.Alive = false;
-                Reset();
-              }
-              else
-              {
-                Console.WriteLine($"There is no such '{itemName}' in this room or your inventory");
-              }
-              break;
-            }
-        }
-
-
-        if (choice != null)
-        {
-          // switch here
-          switch (itemName)
-          {
-            case "magic-eightball":
-              {
-                System.Random rnd = new Random();
-                int meb = rnd.Next(1, 4);
-                if (meb == 1)
-                {
-                  Console.Clear();
-                  Console.WriteLine("There was a chance for you to live");
-                  Console.WriteLine("This time the Eightball did not give");
-                  Console.WriteLine("Try agin and you will see that I can help to set you free");
-                  Console.WriteLine("YOU ARE DEAD!");
-                  System.Threading.Thread.Sleep(9000);
-                  CurrentPlayer.Alive = false;
-                  Reset();
-                }
-                if (meb == 2)
-                {
-                  Console.Clear();
-                  Console.WriteLine("Fanshionable Armor you may wear");
-                  Console.WriteLine("Only wear it if you dare");
-                  Console.WriteLine("It may not be what you think");
-                  Console.WriteLine("If you can stand the nasty stink");
-                }
-                if (meb == 3)
-                {
-                  Console.Clear();
-                  Console.WriteLine("Keep me with you if you must ");
-                  Console.WriteLine("but you might turn into dust");
-                  Console.WriteLine("Only with me you will see");
-                  Console.WriteLine("that I can help to set you free");
-                }
-                break;
-              }
-            case "sword":
-              {
-                if (CurrentRoom.Name.ToLower() != "top")
-                {
-                  Console.WriteLine("There is nothing to Kill here");
-                }
-
-                else
-                {
-                  Item wizard = CurrentRoom.Items.Find(item => item.Name.ToLower() == "wizard");
-                  Item sword = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "sword");
-                  Item depends = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "depends");
-                  Item magic = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == "magic-eightball");
-                  if (depends != null && magic != null && sword != null && wizard != null)
-                  {
-                    Console.Clear();
-                    Console.WriteLine("You Swing your Sword and Kill the Evil Wizard!");
-                    Console.WriteLine("As the Wizard is dieing, he curses you and asks");
-                    Console.WriteLine("HOW DID YOU KNOW? ");
-                    Console.WriteLine("MY SPELL SHOULD HAVE WORKED! CURSE YOU!");
-                    Console.WriteLine("You look down at the dirty depends ");
-                    Console.WriteLine("as they transform into your family armor!");
-                    Console.WriteLine("The opening to the cavern appears.");
-                    Console.WriteLine("You return to your kindom victorious");
-                    Console.WriteLine("with you honor restored you bucket of puke!");
-                    Console.WriteLine("Uhhh sorry Sir. I'm just a lowley Sergeant!");
-                    Console.WriteLine(" ");
-                    Console.WriteLine(" ");
-                    Console.WriteLine("'play' or 'p' to play again, anything else to quit");
-                    string restart = Console.ReadLine().Trim();
-                    if (!(restart.ToLower() == "play" || restart.ToLower() == "p"))
-                    {
-                      Quit();
-                    }
-                    StartGame();
-                  }
-                  else
-                  {
-                    Console.Clear();
-                    Console.WriteLine("You Swing your sword at the Evil Wizard! ");
-                    Console.WriteLine("He just stands there and laughs at you");
-                    Console.WriteLine("as your sword hits him and says");
-                    Console.WriteLine("Now you are going to DIE!");
-                    Console.WriteLine("He casts a spell and your skin starts to burn");
-                    Console.WriteLine("the last thing you hear is the Evil Wizard laughing!");
-                    Console.WriteLine("YOU ARD DEAD ");
-                    System.Threading.Thread.Sleep(9000);
-                    CurrentPlayer.Alive = false;
-                    Reset();
-                  }
-                }
-                break;
-              }
-
-            case "armor":
-              {
-                Console.Clear();
-                Console.WriteLine("As you try on the Armor it fits very well......wait");
-                Console.WriteLine("What is that smell? It is your skin burning off of your bones!");
-                Console.WriteLine("There must have been poison on the inside of the Armor!");
-                Console.WriteLine("DAMN YOU WIZARD!");
-                Console.WriteLine("You hear yourself screeming and then...YOU DIE!");
-                System.Threading.Thread.Sleep(9000);
-                CurrentPlayer.Alive = false;
-                Reset();
-              }
-              break;
-            case "depends":
-              {
-                Console.Clear();
-                Console.WriteLine("As you put on the nasty smelling depends underware");
-                Console.WriteLine("you are overwhelmed by the smell and everything goes dark");
-                System.Threading.Thread.Sleep(3000);
-                Console.WriteLine("Hours later you wake up though you can't smell anthing");
-                Console.WriteLine("the depends fit quite nicely!");
-              }
-              break;
           }
-        }
-        else
-        {
-          Console.WriteLine($"There is no such '{itemName}' in this room or your inventory");
-        }
       }
     }
-
 
     //Print the list of items in the players inventory to the console
     public void Inventory()
